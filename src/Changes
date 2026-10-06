@@ -1,5 +1,23 @@
 Version 7.1
 
+10/16/26 [GH #229]
+Improper handling of "if constexpr" substatements
+
+Previously, when a substatement of an "if constexpr" was discarded during
+instantiation and was not enclosed in braces, statements following the
+discarded statement could additionally be discarded, e.g.:
+
+  template <bool B> constexpr int f() {
+    return [] {
+        if constexpr (B) while (false) {}
+        return 1; // Previously erroneously discarded when B was false.
+        return 2;
+    }();
+  }
+
+This is now fixed.
+
+
 10/9/26  [GH #260]
 GNU and Clang C++ modes: members skipped by a designated initializer
 
