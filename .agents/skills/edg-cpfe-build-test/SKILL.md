@@ -24,6 +24,8 @@ edg-exec --wdir build/gcc -- ninja cpfe-cp   # C++ → C++ from IL
 ```
 
 - Default dirs: `build/gcc`, `bases/docker/dev-env/gcc` (`EDG_BASE`).
+- Changing which macros a build uses (`cmake/macro-conf/*.cmakedef`,
+  `EDG_MACRO_CONF`, new presets): skill **edg-cmakedef-build-config**.
 - Clang: preset `linux-clang-debug` → `build/clang`.
 - Shell in container (cwd → `/edg/workspace`): `edg-exec` or `edg-docker-shell`.
 - If `src/defines.h` is swapped for reproduction, one binary may not build;

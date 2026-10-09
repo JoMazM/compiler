@@ -48,7 +48,9 @@ the host toolchain for normal development; use `edg-exec` /
 [HACKING.md](HACKING.md).
 
 For full recipes (presets, filters, recording), read the project skill
-**edg-cpfe-build-test**. For good/bad commit bisection, read
+**edg-cpfe-build-test**. For macro/build configurations (`.cmakedef`,
+`edg-cmakedef`, `EDG_MACRO_CONF`, presets), read
+**edg-cmakedef-build-config**. For good/bad commit bisection, read
 **edg-cpfe-bisect**.
 
 Agent-friendly defaults:
@@ -124,6 +126,7 @@ If an agent does not auto-load skills, open the matching
 | Skill | Path | Load when |
 | --- | --- | --- |
 | `edg-cpfe-build-test` | [`.agents/skills/edg-cpfe-build-test/SKILL.md`](.agents/skills/edg-cpfe-build-test/SKILL.md) | Building, `edg-docker-test`, recording |
+| `edg-cmakedef-build-config` | [`.agents/skills/edg-cmakedef-build-config/SKILL.md`](.agents/skills/edg-cmakedef-build-config/SKILL.md) | Macro/build configurations, `.cmakedef` files, `edg-cmakedef`, presets |
 | `edg-cpfe-bisect` | [`.agents/skills/edg-cpfe-bisect/SKILL.md`](.agents/skills/edg-cpfe-bisect/SKILL.md) | Good/bad commit bisect for a test regression or fix |
 | `edg-cpfe-frontend` | [`.agents/skills/edg-cpfe-frontend/SKILL.md`](.agents/skills/edg-cpfe-frontend/SKILL.md) | Editing `src/`, IL/templates/overload, `Changes` |
 | `edg-cpfe-style` | [`.agents/skills/edg-cpfe-style/SKILL.md`](.agents/skills/edg-cpfe-style/SKILL.md) | Front-end coding style (`doc/source/code_style.rst`) |
