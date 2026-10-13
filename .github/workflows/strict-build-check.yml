@@ -151,7 +151,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 120
     container:
-      image: docker.io/edgcpp/ci-runner:latest
+      image: docker.io/edgcpp/ci-runner@sha256:69c63755ef518a982b09381b5f420c3da16f0c1eda2c22a6f73277e84a62c28f
     defaults:
       run:
         shell: edg-container-exec "bash -eo pipefail {0}"
@@ -176,7 +176,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 120
     container:
-      image: docker.io/edgcpp/ci-runner:latest
+      image: docker.io/edgcpp/ci-runner@sha256:69c63755ef518a982b09381b5f420c3da16f0c1eda2c22a6f73277e84a62c28f
     defaults:
       run:
         shell: edg-container-exec "bash -eo pipefail {0}"
@@ -201,7 +201,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 120
     container:
-      image: docker.io/edgcpp/ci-runner:latest
+      image: docker.io/edgcpp/ci-runner@sha256:69c63755ef518a982b09381b5f420c3da16f0c1eda2c22a6f73277e84a62c28f
     defaults:
       run:
         shell: edg-container-exec "bash -eo pipefail {0}"
@@ -226,7 +226,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 120
     container:
-      image: docker.io/edgcpp/ci-runner:latest
+      image: docker.io/edgcpp/ci-runner@sha256:69c63755ef518a982b09381b5f420c3da16f0c1eda2c22a6f73277e84a62c28f
     defaults:
       run:
         shell: edg-container-exec "bash -eo pipefail {0}"
