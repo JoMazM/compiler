@@ -31,6 +31,8 @@ from typing import (
 from edgtest import runtest
 from edgtest.filter import (
   BuildConstants,
+  GNU_MODE,
+  MICROSOFT_MODE,
   Normalizer as OutputNormalizer
 )
 
@@ -45,6 +47,19 @@ _NONTRIVIAL_NORMALIZE_OUTPUT_BYTES = 4096
 _TARGET_OPTION_REGEX = re.compile(
   r'(?:^|(?<=\s))--target(?:=|\s+)(\S+)'
 )
+
+# Match, per target mode, the options that are only accepted by front ends
+# built to support that mode (including abbreviations and --no_ forms) in
+# joined option strings.  The Microsoft options are --microsoft...; the GNU
+# options are --gnu..., --g++, --gcc..., and --clang....
+_MODE_OPTION_REGEXES = {
+  MICROSOFT_MODE: re.compile(
+    r'(^|(?<=\s))--(no_)?microsoft\w*'
+  ),
+  GNU_MODE: re.compile(
+    r'(^|(?<=\s))--(no_)?(gnu\w*|g\+\+|gcc\w*|clang\w*)'
+  )
+}
 
 def get_output_filename(env: Dict[str, str],
                         case_number: int,
@@ -993,6 +1008,18 @@ def _case_requests_unsupported_target(
       return True
   return False
 
+def _case_requests_unsupported_mode(
+    cmd_opts: List[str],
+    cmd_case_opts: List[str],
+    target_modes: FrozenSet[str]
+) -> bool:
+  '''True if any base/case option needs a target mode the build lacks.'''
+  options_str = ' '.join([*cmd_opts, *cmd_case_opts])
+  for mode, option_regex in _MODE_OPTION_REGEXES.items():
+    if mode not in target_modes and option_regex.search(options_str):
+      return True
+  return False
+
 async def run_test(test_path: Path, *, top_dir: Path, output_dir: Path,
                    env: Dict[str, str], build_constants: BuildConstants,
                    faster_mode: bool, update_recording: bool, debug_mode: bool,
@@ -1112,6 +1139,21 @@ async def run_test(test_path: Path, *, top_dir: Path, output_dir: Path,
           build_constants.target_configurations
         ):
           # Case requests a --target that this front end was not built with.
+          test_results.append(make_requirements_not_met_status(
+            test_path,
+            mode,
+            test_descript.remark,
+            _case_options_tag(case_number, cmd_case_opts)
+          ))
+          continue
+
+        if _case_requests_unsupported_mode(
+          cmd_opts,
+          cmd_case_opts,
+          build_constants.target_modes
+        ):
+          # Case requests a Microsoft or GNU mode that this front end was not
+          # built to support.
           test_results.append(make_requirements_not_met_status(
             test_path,
             mode,
