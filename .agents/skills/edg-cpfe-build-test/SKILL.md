@@ -47,7 +47,14 @@ edg-docker-test --dry-run rma
 - Postures: `day`, `night`, `quick-c-fe`, `extensive`, or `--posture=@file.json`.
 - Results: `tests/runs/<timestamp>/<config>/` (e.g. `changes.elog`,
   `executed.elist`). Empty / no unexpected diffs means a clean match.
-- Optional override: `EDG_TEST_HOME` (must contain `.edgy/config.json`).
+- `edg-docker-test` is for the standard front-end change workflow, where the
+  user wants these results kept. For ad-hoc runs and experiments, use
+  `edgy --runs-dir` instead (skill **edg-agent-temp-files**); if you still use
+  `edg-docker-test` for a throwaway run, pass `--discard-test-results`.
+- `EDG_TEST_HOME` (must contain `.edgy/config.json`) overrides the test home
+  but a host value is **not** forwarded into the container by
+  `edg-docker-test`; set it inside an `edg-exec` command string (see
+  **edg-agent-temp-files**).
 
 First-test walkthrough: [dev_annex/tutorials/FIRST_TEST.md](../../../dev_annex/tutorials/FIRST_TEST.md).
 
@@ -64,6 +71,12 @@ First-test walkthrough: [dev_annex/tutorials/FIRST_TEST.md](../../../dev_annex/t
    committing **`default.*`** expectation files, not config-specific names
    that are gitignored. See edgy helpers in `dev_tools/pylibs/edgtest`.
 4. Re-run without `-W` to confirm a clean match before asking to commit.
+
+Expectations inherit like recordings: a non-default config's
+`tests/expectations/<config>/<suite>.log` holds only differences from the
+default config's (an explicit `...:PASS:` line overrides an inherited
+failure). Record the default config first (`edgy -W` does this when both run).
+See "Expectation Inheritance" in `doc/source/testing.rst`.
 
 ## Finding a regressing or fixing commit
 
