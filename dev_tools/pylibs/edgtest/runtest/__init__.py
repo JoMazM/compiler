@@ -37,6 +37,19 @@ def get_default_config_name(env: Optional[Dict[str, str]] = None) -> str:
     return env_to_use['RUN_TEST_DEFAULT_CONFIG']
   return 'edg_x86_64'
 
+def get_parent_config_name(
+                       config_name: str,
+                       env: Optional[Dict[str, str]] = None) -> Optional[str]:
+  '''Return the configuration config_name inherits expectations from.
+
+  This is the default configuration, or None for the default configuration
+  itself.
+  '''
+  default_config_name = get_default_config_name(env)
+  if config_name == default_config_name:
+    return None
+  return default_config_name
+
 def get_recording_possible_names(test_suite_env: Dict[str, str],
                                  case_number: int,
                                  command_number: int) -> List[str]:
