@@ -126,7 +126,7 @@ def collect_affected_tests(test_home: Path,
   for diff_file in diff_files:
     file_path = test_home.parent.joinpath(PurePosixPath(diff_file.file_name))
 
-    if file_path.is_relative_to(tests_dir):
+    if edgutil.is_path_relative_to(file_path, tests_dir):
       # A file in a test suite.
       orig_file_path = file_path
 
@@ -166,7 +166,7 @@ def collect_affected_tests(test_home: Path,
                 test_file_found = True
         # File not found, move on to the parent.
         file_path = file_path.parent
-    elif (file_path.is_relative_to(expectations_dir) and
+    elif (edgutil.is_path_relative_to(file_path, expectations_dir) and
           file_path.suffix == '.log'):
       config_name = file_path.parent.name
       suite_name = file_path.stem
@@ -511,7 +511,7 @@ async def simulate_test(test_home: Path, config_run_dir: Path,
     if len(rt_metadata_cases) > 0:
       # relative_test_path is already suite/... (relative to test_home/tests),
       # matching live runs that use path relative to top_dir.parent.
-      await asyncio.to_thread(
+      await edgutil.async_to_thread(
         edgtest.runtest.finalize_rt_tar,
         rt_contents,
         rt_metadata_cases,

@@ -428,16 +428,7 @@ def exec_docker_cmd(image_name: str, workspace_dir: Path,
   if 'EDG_BASE' in os.environ:
     container_workspace_dir = PurePosixPath('/', 'edg', 'workspace')
     host_base_path = Path(os.environ['EDG_BASE'])
-    # Path.is_relative_to is 3.9+.
-    if sys.version_info >= (3, 9):
-      base_is_relative = host_base_path.is_relative_to(workspace_dir)
-    else:
-      try:
-        host_base_path.relative_to(workspace_dir)
-        base_is_relative = True
-      except ValueError:
-        base_is_relative = False
-    if base_is_relative:
+    if edgutil.is_path_relative_to(host_base_path, workspace_dir):
       rel_base_path = host_base_path.relative_to(workspace_dir)
       base_path = container_workspace_dir.joinpath(rel_base_path)
       _add_env_value(docker_args, 'EDG_BASE', str(base_path))

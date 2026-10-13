@@ -490,7 +490,7 @@ async def invoke_recorded_process(
               # If UTF decoding fails, revert to a binary line write.
               output_file_handle.write(line)
 
-        await asyncio.to_thread(background_process_lines)
+        await edgutil.async_to_thread(background_process_lines)
 
   return tested_process.returncode
 
@@ -925,7 +925,7 @@ async def run_test_with_options(test_descript: runtest.TestDescription,
     # isn't fully blocked.  In free-threaded Python builds, this should also
     # be significantly more performant for test suites with heavy regex use.
     matches_file = case_artifact_dir / 'matches' / 'output.txt'
-    missing_matches = await asyncio.to_thread(
+    missing_matches = await edgutil.async_to_thread(
       verify_regex_matches,
       command_body_files,
       test_descript.match_regex,
@@ -1221,7 +1221,7 @@ async def run_test(test_path: Path, *, top_dir: Path, output_dir: Path,
       if len(rt_metadata_cases) > 0:
         # Metadata path is relative to top_dir's parent so the top directory
         # name (e.g. the suite) remains the first path component.
-        await asyncio.to_thread(
+        await edgutil.async_to_thread(
           edgtest.runtest.finalize_rt_tar,
           rt_contents,
           rt_metadata_cases,

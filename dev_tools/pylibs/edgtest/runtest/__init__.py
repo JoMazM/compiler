@@ -1258,7 +1258,7 @@ def finalize_rt_tar(contents: RtTarContents,
   per-case matches diff_hash values.
 
   Callers that need to keep an asyncio event loop responsive should run this
-  via ``asyncio.to_thread``.
+  via ``edgutil.async_to_thread``.
   '''
   diff_hashes: List[str] = []
   for case in cases:
